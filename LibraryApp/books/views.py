@@ -7,7 +7,9 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Book
 
 from authors.models import Author
-
+from authors.helper import get_author_by_id
+from books_author_association.models import BooksAuthorAssociation
+from books_author_association.helper import create_book_author_association
 
 # books/
 @csrf_exempt
@@ -21,9 +23,9 @@ def handle_book_request(request):
 
 
 def get_all_books():
-    booksFetched = Book.objects.all()
+    fetched_books = Book.objects.all()
     response = ""
-    for book in booksFetched:
+    for book in fetched_books:
         response += "<h1> {} </h1>".format(book)
     return HttpResponse(response)
 
@@ -31,13 +33,19 @@ def get_all_books():
 @csrf_exempt
 def create_book(request):
     data = request_json_helper(request)
-
     name = data["name"]
-    author_id = get_author_by_id(data["author_id"])
     initial_copies = data["initial_copies"]
 
-    book = Book(book_name=name, author_id=author_id, copies_count=initial_copies)
+    # creating entry in Book table
+    book = Book(book_name=name, copies_count=initial_copies)
     book.save()
+    
+    # create entry in BooksAuthorAssociation
+    author_ids=data["author_ids"]
+    for author_id in author_ids:
+        author=get_author_by_id(author_id)
+        create_book_author_association(book,author)
+        
     return HttpResponse("Book added")
 
 
@@ -56,8 +64,8 @@ def handle_book_by_id(request, book_id):
 
 
 def get_book_by_id(book_id):
-    bookFetched = Book.objects.get(book_id=book_id)
-    return HttpResponse("<h1> {} </h1>".format(bookFetched))
+    fetched_book = Book.objects.get(book_id=book_id)
+    return HttpResponse("<h1> {} </h1>".format(fetched_book))
 
 
 @csrf_exempt
@@ -65,22 +73,30 @@ def update_book_by_id(request, book_id):
     data = request_json_helper(request)
 
     name = data["name"]
-    author_id = get_author_by_id(data["author_id"])
-    initial_copies = data["initial_copies"]
+    copies_count = data["copies_count"]
 
-    fetchedBook = Book.objects.get(book_id=book_id)
-    fetchedBook.book_name = name
-    fetchedBook.author_id = author_id
-    fetchedBook.copies_count = initial_copies
-    fetchedBook.save()
+    fetched_book = Book.objects.get(book_id=book_id)
+    fetched_book.book_name = name
+    fetched_book.copies_count = copies_count
+    
+    # handling authors updation for books
+    associations=BooksAuthorAssociation.objects.filter(book=fetched_book)
+    associations.delete()
+    
+    author_ids=data["author_ids"]
+    for author_id in author_ids:
+        author=get_author_by_id(author_id)
+        create_book_author_association(fetched_book,author)
+        
+    fetched_book.save()
     return HttpResponse("Book Updated")
 
 
 @csrf_exempt
 def delete_book_by_id(book_id):
     try:
-        bookFetched = Book.objects.get(book_id=book_id)
-        bookFetched.delete()
+        fetched_book = Book.objects.get(book_id=book_id)
+        fetched_book.delete()
         return HttpResponse("Books Deleted")
     except:
         return HttpResponse("Error Deleting Book")
@@ -93,6 +109,3 @@ def request_json_helper(request):
         return data
     except json.JSONDecodeError:
         return JsonResponse({"error": "Invalid JSON data"}, status=400)
-
-def get_author_by_id(author_id):
-    return Author.objects.get(author_id=author_id)

@@ -9,11 +9,11 @@ class Book(models.Model):
         "id", primary_key=True, default=uuid.uuid4, editable=False
     )
     book_name = models.CharField("name", max_length=128)
-    author_id = models.ForeignKey(Author,null=True,on_delete=models.SET_NULL)
+    # author_id = models.ForeignKey(Author,null=True,on_delete=models.SET_NULL)
     copies_count = models.IntegerField("copies_count")
 
     def __str__(self):
-        return self.book_name + " -> " + str(self.book_id)+' -> '+str(self.author_id.author_name)
+        return self.book_name + " -> " + str(self.book_id)
 
     def isAvailable(self):
         return self.copies_count > 0
