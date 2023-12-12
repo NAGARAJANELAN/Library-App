@@ -11,6 +11,7 @@ from authors.helper import get_author_by_id
 from books_author_association.models import BooksAuthorAssociation
 from books_author_association.helper import create_book_author_association
 
+
 # books/
 @csrf_exempt
 def handle_book_request(request):
@@ -35,17 +36,18 @@ def create_book(request):
     data = request_json_helper(request)
     name = data["name"]
     initial_copies = data["initial_copies"]
+    author_ids = data["author_ids"]
 
     # creating entry in Book table
-    book = Book(book_name=name, copies_count=initial_copies)
-    book.save()
-    
-    # create entry in BooksAuthorAssociation
-    author_ids=data["author_ids"]
+    book = Book.objects.create(name=name, count=initial_copies)
+
+    # adding authors to book
     for author_id in author_ids:
-        author=get_author_by_id(author_id)
-        create_book_author_association(book,author)
-        
+        author = get_author_by_id(author_id)
+        book.authors.add(author)
+        book.save()
+
+    book.save()
     return HttpResponse("Book added")
 
 
@@ -64,7 +66,7 @@ def handle_book_by_id(request, book_id):
 
 
 def get_book_by_id(book_id):
-    fetched_book = Book.objects.get(book_id=book_id)
+    fetched_book = Book.objects.get(id=book_id)
     return HttpResponse("<h1> {} </h1>".format(fetched_book))
 
 
@@ -75,31 +77,28 @@ def update_book_by_id(request, book_id):
     name = data["name"]
     copies_count = data["copies_count"]
 
-    fetched_book = Book.objects.get(book_id=book_id)
-    fetched_book.book_name = name
-    fetched_book.copies_count = copies_count
-    
+    fetched_book = Book.objects.get(id=book_id)
+    fetched_book.name = name
+    fetched_book.count = copies_count
+    author_ids = data["author_ids"]
+
     # handling authors updation for books
-    associations=BooksAuthorAssociation.objects.filter(book=fetched_book)
-    associations.delete()
-    
-    author_ids=data["author_ids"]
-    for author_id in author_ids:
-        author=get_author_by_id(author_id)
-        create_book_author_association(fetched_book,author)
-        
+    fetched_book.authors.clear()
     fetched_book.save()
+
+    for author_id in author_ids:
+        author = get_author_by_id(author_id)
+        fetched_book.authors.add(author)
+        fetched_book.save()
+    fetched_book.save()
+
     return HttpResponse("Book Updated")
 
 
 @csrf_exempt
 def delete_book_by_id(book_id):
     try:
-        fetched_book = Book.objects.get(book_id=book_id)
-        associations=BooksAuthorAssociation.objects.filter(book=fetched_book)
-        for association in associations:
-            association.author.book_count-=1
-            association.author.save()
+        fetched_book = Book.objects.get(id=book_id)
         fetched_book.delete()
         return HttpResponse("Books Deleted")
     except:

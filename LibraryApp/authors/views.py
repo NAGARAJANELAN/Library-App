@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
+from helper import request_json_helper
 from .models import Author
 
 
@@ -30,7 +31,7 @@ def get_all_authors():
 def create_author(request):
     data = request_json_helper(request)
     name = data["name"]
-    author = Author(author_name=name)
+    author = Author(name=name)
     author.save()
     return HttpResponse("<h1>author added</h1>")
 
@@ -50,7 +51,7 @@ def handle_author_by_id(request, author_id):
 
 
 def get_author_by_id(author_id):
-    author_fetched = Author.objects.get(author_id=author_id)
+    author_fetched = Author.objects.get(id=author_id)
     return HttpResponse("<h1> {} </h1>".format(author_fetched))
 
 
@@ -59,8 +60,8 @@ def update_author_by_id(request, author_id):
     data = request_json_helper(request)
 
     name = data["name"]
-    author_fetched = Author.objects.get(author_id=author_id)
-    author_fetched.author_name = name
+    author_fetched = Author.objects.get(id=author_id)
+    author_fetched.name = name
     author_fetched.save()
     return HttpResponse("author Updated")
 
@@ -68,17 +69,8 @@ def update_author_by_id(request, author_id):
 @csrf_exempt
 def delete_author_by_id(author_id):
     try:
-        author_fetched = Author.objects.get(author_id=author_id)
+        author_fetched = Author.objects.get(id=author_id)
         author_fetched.delete()
         return HttpResponse("authors Deleted")
     except:
         return HttpResponse("Error Deleting author")
-
-
-def request_json_helper(request):
-    raw_data = request.body.decode("utf-8")
-    try:
-        data = json.loads(raw_data)
-        return data
-    except json.JSONDecodeError:
-        return JsonResponse({"error": "Invalid JSON data"}, status=400)

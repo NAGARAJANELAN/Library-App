@@ -3,7 +3,7 @@
         "model": "authors.Author",
         "pk": 1,
         "fields": {
-            "author_name": "John Author",
+            "name": "John Author",
             "book_count":1
         }
     },
@@ -11,8 +11,8 @@
         "model": "books.Book",
         "pk": 11,
         "fields": {
-            "book_name": "Sample Book 1",
-            "copies_count": 10
+            "name": "Sample Book 1",
+            "count": 10
         }
     },
     {
@@ -26,7 +26,7 @@
         "model": "authors.Author",
         "pk": 2,
         "fields": {
-            "author_name": "Jane Author",
+            "name": "Jane Author",
             "book_count":2
         }
     },
@@ -34,8 +34,8 @@
         "model": "books.Book",
         "pk": 22,
         "fields": {
-            "book_name": "Sample Book 2",
-            "copies_count": 5
+            "name": "Sample Book 2",
+            "count": 5
         }
     },
     {
@@ -56,7 +56,7 @@
         "model": "authors.Author",
         "pk": 3,
         "fields": {
-            "author_name": "Bob Author",
+            "name": "Bob Author",
             "book_count":2
         }
     },
@@ -64,16 +64,16 @@
         "model": "books.Book",
         "pk": 31,
         "fields": {
-            "book_name": "Sample Book 3",
-            "copies_count": 15
+            "name": "Sample Book 3",
+            "count": 15
         }
     },
     {
         "model": "books.Book",
         "pk": 32,
         "fields": {
-            "book_name": "Sample Book 33",
-            "copies_count": 12
+            "name": "Sample Book 33",
+            "count": 12
         }
     },
     {
@@ -94,7 +94,7 @@
         "model": "authors.Author",
         "pk": 4,
         "fields": {
-            "author_name": "Alice Author",
+            "name": "Alice Author",
             "book_count":1
         }
     },
@@ -102,8 +102,8 @@
         "model": "books.Book",
         "pk": 44,
         "fields": {
-            "book_name": "Sample Book 4",
-            "copies_count": 7
+            "name": "Sample Book 4",
+            "count": 7
         }
     },
     {
@@ -117,7 +117,7 @@
         "model": "authors.Author",
         "pk": 5,
         "fields": {
-            "author_name": "Charlie Author",
+            "name": "Charlie Author",
             "book_count":1
         }
     },
@@ -125,8 +125,8 @@
         "model": "books.Book",
         "pk": 55,
         "fields": {
-            "book_name": "Sample Book 5",
-            "copies_count": 12
+            "name": "Sample Book 5",
+            "count": 12
         }
     },
     {
