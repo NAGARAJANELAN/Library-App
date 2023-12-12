@@ -10,4 +10,4 @@ class Author(models.Model):
     book_count=models.IntegerField("book_count",default=0)
     
     def __str__(self):
-        return self.author_name+' '+str(self.author_id)
+        return self.author_name+' '+str(self.author_id) +' '+str(self.book_count)

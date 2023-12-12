@@ -96,6 +96,10 @@ def update_book_by_id(request, book_id):
 def delete_book_by_id(book_id):
     try:
         fetched_book = Book.objects.get(book_id=book_id)
+        associations=BooksAuthorAssociation.objects.filter(book=fetched_book)
+        for association in associations:
+            association.author.book_count-=1
+            association.author.save()
         fetched_book.delete()
         return HttpResponse("Books Deleted")
     except:

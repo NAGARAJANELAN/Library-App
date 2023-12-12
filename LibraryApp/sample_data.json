@@ -3,83 +3,137 @@
         "model": "authors.Author",
         "pk": 1,
         "fields": {
-            "author_name": "John Author"
+            "author_name": "John Author",
+            "book_count":1
         }
     },
     {
         "model": "books.Book",
+        "pk": 11,
         "fields": {
             "book_name": "Sample Book 1",
-            "author_id": 1,
             "copies_count": 10
+        }
+    },
+    {
+        "model":"books_author_association.BooksAuthorAssociation",
+        "fields":{
+            "book":11,
+            "author":1
         }
     },
     {
         "model": "authors.Author",
         "pk": 2,
         "fields": {
-            "author_name": "Jane Author"
+            "author_name": "Jane Author",
+            "book_count":2
         }
     },
     {
         "model": "books.Book",
+        "pk": 22,
         "fields": {
             "book_name": "Sample Book 2",
-            "author_id": 2,
             "copies_count": 5
+        }
+    },
+    {
+        "model":"books_author_association.BooksAuthorAssociation",
+        "fields":{
+            "book":22,
+            "author":2
+        }
+    },
+    {
+        "model":"books_author_association.BooksAuthorAssociation",
+        "fields":{
+            "book":11,
+            "author":2
         }
     },
     {
         "model": "authors.Author",
         "pk": 3,
         "fields": {
-            "author_name": "Bob Author"
+            "author_name": "Bob Author",
+            "book_count":2
         }
     },
     {
         "model": "books.Book",
+        "pk": 31,
         "fields": {
             "book_name": "Sample Book 3",
-            "author_id": 3,
             "copies_count": 15
         }
     },
     {
         "model": "books.Book",
+        "pk": 32,
         "fields": {
             "book_name": "Sample Book 33",
-            "author_id": 3,
             "copies_count": 12
+        }
+    },
+    {
+        "model":"books_author_association.BooksAuthorAssociation",
+        "fields":{
+            "book":31,
+            "author":3
+        }
+    },
+    {
+        "model":"books_author_association.BooksAuthorAssociation",
+        "fields":{
+            "book":32,
+            "author":3
         }
     },
     {
         "model": "authors.Author",
         "pk": 4,
         "fields": {
-            "author_name": "Alice Author"
+            "author_name": "Alice Author",
+            "book_count":1
         }
     },
     {
         "model": "books.Book",
+        "pk": 44,
         "fields": {
             "book_name": "Sample Book 4",
-            "author_id": 4,
             "copies_count": 7
+        }
+    },
+    {
+        "model":"books_author_association.BooksAuthorAssociation",
+        "fields":{
+            "book":44,
+            "author":4
         }
     },
     {
         "model": "authors.Author",
         "pk": 5,
         "fields": {
-            "author_name": "Charlie Author"
+            "author_name": "Charlie Author",
+            "book_count":1
         }
     },
     {
         "model": "books.Book",
+        "pk": 55,
         "fields": {
             "book_name": "Sample Book 5",
-            "author_id": 5,
             "copies_count": 12
+        }
+    },
+    {
+        "model":"books_author_association.BooksAuthorAssociation",
+        "fields":{
+            "book":55,
+            "author":5
         }
     }
 ]
