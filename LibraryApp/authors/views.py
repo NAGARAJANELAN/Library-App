@@ -9,25 +9,12 @@ class AuthorList(generics.ListCreateAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
-    def perform_create(self, serializer):
-        update_book_count(serializer)
-
 
 # /authors/id
 class AuthorDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
     lookup_field = "id"
-
-    def perform_update(self, serializer):
-        update_book_count(serializer)
-
-
-def update_book_count(serializer):
-    serializer.validated_data["book_count"] = len(
-        serializer.validated_data["books_authored"]
-    )
-    serializer.save()
 
 
 # Does same as above

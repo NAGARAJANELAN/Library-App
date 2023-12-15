@@ -9,36 +9,12 @@ class BookList(generics.ListCreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
-    def perform_create(self, serializer):
-        serializer.save()
-        update_authors_book_count(serializer.validated_data["authors"])
-
 
 # /books/id
 class BookDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     lookup_field = "id"
-
-    def perform_update(self, serializer):
-        serializer.save()
-        update_authors_book_count(serializer.validated_data["authors"])
-
-    def perform_destroy(self, instance):
-        reduce_author_book_count(instance.authors.all())
-        instance.delete()
-
-
-def update_authors_book_count(authors):
-    for author in authors:
-        author.book_count = author.books_authored.count()
-        author.save()
-
-
-def reduce_author_book_count(authors):
-    for author in authors:
-        author.book_count -= 1
-        author.save()
 
 
 # books/
